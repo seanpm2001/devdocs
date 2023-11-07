@@ -1,0 +1,676 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>scipy.stats.wasserstein_distance &#8212; SciPy v1.12.0.dev Manual</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/scipy.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script async="async" src="../../_static/scipy-mathjax/MathJax.js?config=scipy-mathjax"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="scipy.stats.energy_distance" href="scipy.stats.energy_distance.html" />
+    <link rel="prev" title="scipy.stats.gzscore" href="scipy.stats.gzscore.html" />
+    <script defer data-domain="docs.scipy.org" src="https://views.scientific-python.org/js/script.js"></script>
+    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://scipy.org/install/">
+  Installing
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../tutorial/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../building/index.html">
+  Building from source
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../dev/index.html">
+  Development
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../release.html">
+  Release notes
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        development  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables reference/generated/scipy.stats.wasserstein_distance and {'json_url': 'https://scipy.github.io/devdocs/_static/version_switcher.json', 'version_match': 'development'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "reference/generated/scipy.stats.wasserstein_distance.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://scipy.github.io/devdocs/_static/version_switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "reference/generated/scipy.stats.wasserstein_distance.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 1.12.0.dev variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "development") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/scipy/scipy" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/SciPy_team" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing Information
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/conduct/code_of_conduct.html">
+   SciPy Code of Conduct
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/hacking.html">
+   Ways to Contribute
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/dev_quickstart.html">
+   Contributor quickstart guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/development_workflow.html">
+   Development workflow
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="reference internal" href="../../dev/contributor/contributor_toc.html">
+   SciPy contributor guide
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Roadmap
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/roadmap.html">
+   SciPy Roadmap
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/roadmap-detailed.html">
+   Detailed SciPy Roadmap
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/toolchain.html">
+   Toolchain Roadmap
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SciPy Organization
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/core-dev/index.html">
+   SciPy Core Developer Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/api-dev/api-dev-toc.html">
+   SciPy API Development Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/governance.html">
+   SciPy Project Governance
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/development_workflow.html">
+   Development workflow
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/pep8.html">
+   PEP8 and SciPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/rendering_documentation.html">
+   Contributing to the SciPy documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/devpy_test.html">
+   Running SciPy Tests Locally
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/benchmarking.html">
+   Benchmarking SciPy with airspeed velocity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/cython.html">
+   Adding Cython to SciPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/public_cython_api.html">
+   Public Cython APIs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/adding_new.html">
+   Adding New Methods, Functions, and Classes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/continuous_integration.html">
+   Continuous Integration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/contributor/using_act.html">
+   <em class="xref py py-obj">
+    act
+   </em>
+   for running GitHub Actions locally
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../dev/triage.html">
+   Triaging and curating issues
+  </a>
+ </li>
+</ul>
+
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scipy.stats.wasserstein_distance">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     wasserstein_distance
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="scipy-stats-wasserstein-distance">
+<h1>scipy.stats.wasserstein_distance<a class="headerlink" href="#scipy-stats-wasserstein-distance" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="scipy.stats.wasserstein_distance">
+<span class="sig-prename descclassname"><span class="pre">scipy.stats.</span></span><span class="sig-name descname"><span class="pre">wasserstein_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/scipy/scipy/blob/main/scipy/stats/_stats_py.py#L10172-L10393"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scipy.stats.wasserstein_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the Wasserstein-1 distance between two discrete distributions.</p>
+<p>The Wasserstein distance, also called the Earth mover’s distance or the
+optimal transport distance, is a similarity metric between two probability
+distributions. In the discrete case, the Wasserstein distance can be
+understood as the cost of an optimal transport plan to convert one
+distribution into the other. The cost is calculated as the product of the
+amount of probability mass being moved and the distance it is being moved.
+A brief and intuitive introduction can be found at <a class="reference internal" href="#rbc4e517f9be6-2" id="id1">[2]</a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>u_values</strong><span class="classifier">1d or 2d array_like</span></dt><dd><p>A sample from a probability distribution or the support (set of all
+possible values) of a probability distribution. Each element along
+axis 0 is an observation or possible value. If two-dimensional, axis
+1 represents the dimensionality of the distribution; i.e., each row is
+a vector observation or possible value.</p>
+</dd>
+<dt><strong>v_values</strong><span class="classifier">1d or 2d array_like</span></dt><dd><p>A sample from or the support of a second distribution.</p>
+</dd>
+<dt><strong>u_weights, v_weights</strong><span class="classifier">1d array_like, optional</span></dt><dd><p>Weights or counts corresponding with the sample or probability masses
+corresponding with the support values. Sum of elements must be positive
+and finite. If unspecified, each value is assigned the same weight.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>distance</strong><span class="classifier">float</span></dt><dd><p>The computed distance between the distributions.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Given two probability mass functions, <span class="math notranslate nohighlight">\(u\)</span>
+and <span class="math notranslate nohighlight">\(v\)</span>, the first Wasserstein distance between the distributions
+is:</p>
+<div class="math notranslate nohighlight">
+\[l_1 (u, v) = \inf_{\pi \in \Gamma (u, v)} \int_{\mathbb{R} \times
+\mathbb{R}} |x-y| \mathrm{d} \pi (x, y)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Gamma (u, v)\)</span> is the set of (probability) distributions on
+<span class="math notranslate nohighlight">\(\mathbb{R} \times \mathbb{R}\)</span> whose marginals are <span class="math notranslate nohighlight">\(u\)</span> and
+<span class="math notranslate nohighlight">\(v\)</span> on the first and second factors respectively. For a given value
+<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(u(x)\)</span> gives the probability of <span class="math notranslate nohighlight">\(u\)</span> at position
+<span class="math notranslate nohighlight">\(x\)</span>, and the same for <span class="math notranslate nohighlight">\(v(x)\)</span>.</p>
+<p>In the 1-dimensional case, let <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> denote the
+respective CDFs of <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span>, this distance also equals to:</p>
+<div class="math notranslate nohighlight">
+\[l_1(u, v) = \int_{-\infty}^{+\infty} |U-V|\]</div>
+<p>See <a class="reference internal" href="#rbc4e517f9be6-3" id="id2">[3]</a> for a proof of the equivalence of both definitions.</p>
+<p>In the more general (higher dimensional) and discrete case, it is also
+called the optimal transport problem or the Monge problem.
+Let the finite point sets <span class="math notranslate nohighlight">\(\{x_i\}\)</span> and <span class="math notranslate nohighlight">\(\{y_j\}\)</span> denote
+the support set of probability mass function <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span>
+respectively. The Monge problem can be expressed as follows,</p>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> denote the transport plan, <span class="math notranslate nohighlight">\(D\)</span> denote the
+distance matrix and,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}x = \text{vec}(\Gamma)          \\
+c = \text{vec}(D)               \\
+b = \begin{bmatrix}
+        u\\
+        v\\
+    \end{bmatrix}\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\text{vec}()\)</span> function denotes the Vectorization function
+that transforms a matrix into a column vector by vertically stacking
+the columns of the matrix.
+The transport plan <span class="math notranslate nohighlight">\(\Gamma\)</span> is a matrix <span class="math notranslate nohighlight">\([\gamma_{ij}]\)</span> in
+which <span class="math notranslate nohighlight">\(\gamma_{ij}\)</span> is a positive value representing the amount of
+probability mass transported from <span class="math notranslate nohighlight">\(u(x_i)\)</span> to <span class="math notranslate nohighlight">\(v(y_i)\)</span>.
+Summing over the rows of <span class="math notranslate nohighlight">\(\Gamma\)</span> should give the source distribution
+<span class="math notranslate nohighlight">\(u\)</span> : <span class="math notranslate nohighlight">\(\sum_j \gamma_{ij} = u(x_i)\)</span> holds for all <span class="math notranslate nohighlight">\(i\)</span>
+and summing over the columns of <span class="math notranslate nohighlight">\(\Gamma\)</span> should give the target
+distribution <span class="math notranslate nohighlight">\(v\)</span>: <span class="math notranslate nohighlight">\(\sum_i \gamma_{ij} = v(y_j)\)</span> holds for all
+<span class="math notranslate nohighlight">\(j\)</span>.
+The distance matrix <span class="math notranslate nohighlight">\(D\)</span> is a matrix <span class="math notranslate nohighlight">\([d_{ij}]\)</span>, in which
+<span class="math notranslate nohighlight">\(d_{ij} = d(x_i, y_j)\)</span>.</p>
+<p>Given <span class="math notranslate nohighlight">\(\Gamma\)</span>, <span class="math notranslate nohighlight">\(D\)</span>, <span class="math notranslate nohighlight">\(b\)</span>, the Monge problem can be
+transformed into a linear programming problem by
+taking <span class="math notranslate nohighlight">\(A x = b\)</span> as constraints and <span class="math notranslate nohighlight">\(z = c^T x\)</span> as minimization
+target (sum of costs) , where matrix <span class="math notranslate nohighlight">\(A\)</span> has the form</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{array} {rrrr|rrrr|r|rrrr}
+    1 &amp; 1 &amp; \dots &amp; 1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp;
+        0 \cr
+    0 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; 1 &amp; \dots &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp;\dots &amp;
+        0 \cr
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots
+        &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots  \cr
+    0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; \dots &amp; 1 &amp; 1 &amp; \dots &amp;
+        1 \cr \hline\\    1 &amp; 0 &amp; \dots &amp; 0 &amp; 1 &amp; 0 &amp; \dots &amp; \dots &amp; \dots &amp; 1 &amp; 0 &amp; \dots &amp;
+        0 \cr
+    0 &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp; 1 &amp; \dots &amp; \dots &amp; \dots &amp; 0 &amp; 1 &amp; \dots &amp;
+        0 \cr
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp;
+        \vdots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \cr
+    0 &amp; 0 &amp; \dots &amp; 1 &amp; 0 &amp; 0 &amp; \dots &amp; 1 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 1
+\end{array}\end{aligned}\end{align} \]</div>
+<p>By solving the dual form of the above linear programming problem (with
+solution <span class="math notranslate nohighlight">\(y^*\)</span>), the Wasserstein distance <span class="math notranslate nohighlight">\(l_1 (u, v)\)</span> can
+be computed as <span class="math notranslate nohighlight">\(b^T y^*\)</span>.</p>
+<p>The above solution is inspired by Vincent Herrmann’s blog <a class="reference internal" href="#rbc4e517f9be6-5" id="id3">[5]</a> . For a
+more thorough explanation, see <a class="reference internal" href="#rbc4e517f9be6-4" id="id4">[4]</a> .</p>
+<p>The input distributions can be empirical, therefore coming from samples
+whose values are effectively inputs of the function, or they can be seen as
+generalized functions, in which case they are weighted sums of Dirac delta
+functions located at the specified values.</p>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rbc4e517f9be6-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>“Wasserstein metric”,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Wasserstein_metric">https://en.wikipedia.org/wiki/Wasserstein_metric</a></p>
+</div>
+<div class="citation" id="rbc4e517f9be6-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
+<p>Lili Weng, “What is Wasserstein distance?”, Lil’log,
+<a class="reference external" href="https://lilianweng.github.io/posts/2017-08-20-gan/#what-is">https://lilianweng.github.io/posts/2017-08-20-gan/#what-is</a>-
+wasserstein-distance.</p>
+</div>
+<div class="citation" id="rbc4e517f9be6-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">3</a><span class="fn-bracket">]</span></span>
+<p>Ramdas, Garcia, Cuturi “On Wasserstein Two Sample Testing and
+Related Families of Nonparametric Tests” (2015).
+<a class="reference external" href="https://arxiv.org/abs/1509.02237">arXiv:1509.02237</a>.</p>
+</div>
+<div class="citation" id="rbc4e517f9be6-4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>Peyré, Gabriel, and Marco Cuturi. “Computational optimal
+transport.” Center for Research in Economics and Statistics
+Working Papers 2017-86 (2017).</p>
+</div>
+<div class="citation" id="rbc4e517f9be6-5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">5</a><span class="fn-bracket">]</span></span>
+<p>Hermann, Vincent. “Wasserstein GAN and the Kantorovich-Rubinstein
+Duality”. <a class="reference external" href="https://vincentherrmann.github.io/blog/wasserstein/">https://vincentherrmann.github.io/blog/wasserstein/</a>.</p>
+</div>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">wasserstein_distance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wasserstein_distance</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="go">5.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wasserstein_distance</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="go">0.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wasserstein_distance</span><span class="p">([</span><span class="mf">3.4</span><span class="p">,</span> <span class="mf">3.9</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.8</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">1.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">,</span> <span class="mf">7.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">])</span>
+<span class="go">4.0781331438047861</span>
+</pre></div>
+</div>
+<p>Compute the Wasserstein distance between two three-dimensional samples,
+each with two observations.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wasserstein_distance</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]],</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]])</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<p>Compute the Wasserstein distance between two two-dimensional distributions
+with three and two weighted observations, respectively.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wasserstein_distance</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.75</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mf">209.3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+<span class="gp">... </span>                     <span class="p">[[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.322</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">25.1808</span><span class="p">]],</span>
+<span class="gp">... </span>                     <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">,</span> <span class="mf">0.114</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+<span class="go">174.15840245217169</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="scipy.stats.gzscore.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">scipy.stats.gzscore</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="scipy.stats.energy_distance.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">scipy.stats.energy_distance</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2008-2023, The SciPy community.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

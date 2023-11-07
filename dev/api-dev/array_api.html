@@ -1,0 +1,741 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Support for Array API &#8212; SciPy v1.12.0.dev Manual</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/scipy.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SciPy Project Governance" href="../governance.html" />
+    <link rel="prev" title="Adding vectorized ufuncs in scipy.special" href="special_ufuncs.html" />
+    <script defer data-domain="docs.scipy.org" src="https://views.scientific-python.org/js/script.js"></script>
+    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://scipy.org/install/">
+  Installing
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../tutorial/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../reference/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../building/index.html">
+  Building from source
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Development
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../release.html">
+  Release notes
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        development  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables dev/api-dev/array_api and {'json_url': 'https://scipy.github.io/devdocs/_static/version_switcher.json', 'version_match': 'development'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "dev/api-dev/array_api.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://scipy.github.io/devdocs/_static/version_switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "dev/api-dev/array_api.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 1.12.0.dev variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "development") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/scipy/scipy" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/SciPy_team" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing Information
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../conduct/code_of_conduct.html">
+   SciPy Code of Conduct
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../hacking.html">
+   Ways to Contribute
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dev_quickstart.html">
+   Contributor quickstart guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor/development_workflow.html">
+   Development workflow
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributor/contributor_toc.html">
+   SciPy contributor guide
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Roadmap
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../roadmap.html">
+   SciPy Roadmap
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../roadmap-detailed.html">
+   Detailed SciPy Roadmap
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../toolchain.html">
+   Toolchain Roadmap
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  SciPy Organization
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core-dev/index.html">
+   SciPy Core Developer Guide
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="api-dev-toc.html">
+   SciPy API Development Guide
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="nan_policy.html">
+     A Design Specification for
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nan_policy
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="special_ufuncs.html">
+     Adding vectorized ufuncs in
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scipy.special
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Support for Array API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../governance.html">
+   SciPy Project Governance
+  </a>
+ </li>
+</ul>
+
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-array-api-support">
+   Using Array API support
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#currently-supported-functionality">
+     Currently supported functionality
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation-notes">
+   Implementation notes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-array-api-support-to-a-scipy-function">
+   Adding Array API support to a SciPy function
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-tests">
+   Adding tests
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#additional-information">
+   Additional information
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="support-for-array-api">
+<h1>Support for Array API<a class="headerlink" href="#support-for-array-api" title="Permalink to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Array API support is still experimental and hidden behind an
+environment variable. Only a small part of the public API is covered
+right now.</p>
+</div>
+<p>This guide describes how to <strong>use</strong> and <strong>add support for</strong> the
+<a class="reference external" href="https://data-apis.org/array-api/latest/index.html">Python Array API standard</a>.
+This standard allows users to use any Array API compatible array library
+with SciPy out of the box.</p>
+<p>The <a class="reference external" href="https://github.com/scipy/scipy/issues/18286">RFC</a> defines how SciPy implements support for the standard, with the main
+principle being <em>“array type in equals array type out”</em>. In addition, the
+implementation does more strict validation of allowed array-like inputs, e.g.
+rejecting numpy matrix and masked array instances, and arrays with object
+dtype.</p>
+<p>In the following, an Array API compatible namespace is noted as <code class="docutils literal notranslate"><span class="pre">xp</span></code>.</p>
+<section id="using-array-api-support">
+<h2>Using Array API support<a class="headerlink" href="#using-array-api-support" title="Permalink to this heading">#</a></h2>
+<p>To enable the Array API standard support, an environment variable must be set
+before importing SciPy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">SCIPY_ARRAY_API</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>This both enables array API standard support and the more strict input
+validation for array-like arguments. <em>Note that this environment variable is
+meant to be temporary, as a way to make incremental changes and merge them into
+``main`` without affecting backwards compatibility immediately. We do not
+intend to keep this environment variable around long-term.</em></p>
+<p>This clustering example shows usage with PyTorch tensors as inputs and return
+values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.cluster.vq</span> <span class="kn">import</span> <span class="n">vq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code_book</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">1.9</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="n">vq</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">code_book</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code</span>
+<span class="go">tensor([1, 1, 0], dtype=torch.int32)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>
+<span class="go">tensor([0.4359, 0.7348, 0.8307])</span>
+</pre></div>
+</div>
+<p>Note that the above example works for PyTorch CPU tensors. For GPU tensors or
+CuPy arrays, the expected result for <code class="docutils literal notranslate"><span class="pre">vq</span></code> is a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, because <code class="docutils literal notranslate"><span class="pre">vq</span></code>
+is not a pure Python function and hence won’t work on GPU.</p>
+<p>More strict array input validation will reject <code class="docutils literal notranslate"><span class="pre">np.matrix</span></code> and
+<code class="docutils literal notranslate"><span class="pre">np.ma.MaskedArray</span></code> instances, as well as arrays with <code class="docutils literal notranslate"><span class="pre">object</span></code> dtype:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.cluster.vq</span> <span class="kn">import</span> <span class="n">vq</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">code_book</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">],</span>
+<span class="gp">... </span>                      <span class="p">[</span><span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">features</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.9</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">],</span>
+<span class="gp">... </span>                      <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">],</span>
+<span class="gp">... </span>                      <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.7</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vq</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">code_book</span><span class="p">)</span>
+<span class="go">(array([1, 1, 0], dtype=int32), array([0.43588989, 0.73484692, 0.83066239]))</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The above uses numpy arrays; trying to use np.matrix instances or object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># arrays instead will yield an exception with `SCIPY_ARRAY_API=1`:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vq</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asmatrix</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="n">code_book</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">TypeError: &#39;numpy.matrix&#39; are not supported</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vq</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> <span class="n">code_book</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">TypeError: &#39;numpy.ma.MaskedArray&#39; are not supported</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vq</span><span class="p">(</span><span class="n">features</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">object_</span><span class="p">),</span> <span class="n">code_book</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">TypeError: object arrays are not supported</span>
+</pre></div>
+</div>
+<section id="currently-supported-functionality">
+<h3>Currently supported functionality<a class="headerlink" href="#currently-supported-functionality" title="Permalink to this heading">#</a></h3>
+<p>The following modules provide Array API standard support when the environment
+variable is set:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">scipy.cluster.hierarchy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scipy.cluster.vq</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scipy.fft</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="implementation-notes">
+<h2>Implementation notes<a class="headerlink" href="#implementation-notes" title="Permalink to this heading">#</a></h2>
+<p>A key part of the support for the array API standard and specific compatibility
+functions for Numpy, CuPy and PyTorch is provided through
+<a class="reference external" href="https://github.com/data-apis/array-api-compat">array-api-compat</a>.
+This package is included in the SciPy code base via a git submodule (under
+<code class="docutils literal notranslate"><span class="pre">scipy/_lib</span></code>), so no new dependencies are introduced.</p>
+<p><code class="docutils literal notranslate"><span class="pre">array-api_compat</span></code> provides generic utility functions and adds aliases such
+as <code class="docutils literal notranslate"><span class="pre">xp.concat</span></code> (which, for numpy, maps to <code class="docutils literal notranslate"><span class="pre">np.concatenate</span></code>). This allows
+using a uniform API across NumPy, PyTorch and CuPy (as of right now; support
+for other libraries like JAX is expected to be added in the future).</p>
+<p>When the environment variable isn’t set and hence Array API support in SciPy is
+disabled, we still use the “augmented” version of the NumPy namespace, which is
+<code class="docutils literal notranslate"><span class="pre">array_api_compat.numpy</span></code>. That should not change behavior of SciPy functions,
+it’s effectively the existing <code class="docutils literal notranslate"><span class="pre">numpy</span></code> namespace with a number of aliases
+added and a handful of functions amended/added for array API standard support.
+When support is enabled, depending on the type of arrays, <code class="docutils literal notranslate"><span class="pre">xp</span></code> will return the
+standard-compatible namespace matching the input array type to a function (e.g.,
+if the input to <code class="docutils literal notranslate"><span class="pre">cluster.vq.kmeans</span></code> is a PyTorch array, then <code class="docutils literal notranslate"><span class="pre">xp</span></code> is
+<code class="docutils literal notranslate"><span class="pre">array_api_compat.torch</span></code>).</p>
+</section>
+<section id="adding-array-api-support-to-a-scipy-function">
+<h2>Adding Array API support to a SciPy function<a class="headerlink" href="#adding-array-api-support-to-a-scipy-function" title="Permalink to this heading">#</a></h2>
+<p>As much as possible, new code added to SciPy should try to follow as closely as
+possible the Array API standard (these functions typically are best-practice
+idioms for NumPy usage as well). By following the standard, effectively adding
+support for Array API is typically straightforward, and we ideally don’t need
+to maintain any customization.</p>
+<p>Two helper functions are available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">array_namespace</span></code>: detect the namespace based on input arrays and do some
+input validation (like refusing to work with masked arrays, please see the
+<a class="reference external" href="https://github.com/scipy/scipy/issues/18286">RFC</a>.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">as_xparray</span></code>: a drop-in replacement for <code class="docutils literal notranslate"><span class="pre">np.asarray</span></code> with additional
+features like <code class="docutils literal notranslate"><span class="pre">copy,</span> <span class="pre">check_finite</span></code>. As stated above, try to limit the use
+of non standard features. In the end we would want to upstream our needs to
+the compatibility library.</p></li>
+</ul>
+<p>To add support to a SciPy function which is defined in a <code class="docutils literal notranslate"><span class="pre">.py</span></code> file, what you
+have to change is:</p>
+<ol class="arabic simple">
+<li><p>Input array validation,</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">xp</span></code> rather <code class="docutils literal notranslate"><span class="pre">np</span></code> functions,</p></li>
+<li><p>When calling into compiled code, convert the array to a NumPy array before
+and convert it back to the input array type after.</p></li>
+</ol>
+<p>Input array validation uses the following pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xp</span> <span class="o">=</span> <span class="n">array_namespace</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>  <span class="c1"># where `arr` is the first input array</span>
+<span class="c1"># Do this for each input array, it applies all the validation steps (reject</span>
+<span class="c1"># matrix, etc.) as well as the conversion to a numpy array if it&#39;s a</span>
+<span class="c1"># sequence, or preserve the non-numpy array type:</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">as_xparray</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">xp</span><span class="o">=</span><span class="n">xp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that if one input is a non-numpy array type, all array-like inputs have to
+be of that type; trying to mix non-numpy arrays with lists, Python scalars or
+other arbitrary Python objects will raise an exception. For NumPy arrays, those
+types will continue to be accepted for backwards compatibility reasons.</p>
+<p>If a function calls into a compiled code just once, use the following pattern:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># convert to numpy right before compiled call(s)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">_call_compiled_code</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># convert back to original array type</span>
+</pre></div>
+</div>
+<p>If there are multiple calls to compiled code, ensure doing the conversion just
+once to avoid too much overhead.</p>
+<p>Here is an example for a hypothetical public SciPy function <code class="docutils literal notranslate"><span class="pre">toto</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">toto</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="c1"># this is some C or Cython call</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span>
+</pre></div>
+</div>
+<p>You would convert this like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">toto</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="n">xp</span> <span class="o">=</span> <span class="n">array_namespace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">as_xparray</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># our custom helper is needed for copy</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="n">xp</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+
+    <span class="c1"># this is some C or Cython call</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span>
+</pre></div>
+</div>
+<p>Going through compiled code requires going back to a NumPy array, because
+SciPy’s extension modules only work with NumPy arrays (or memoryviews in the
+case of Cython), but not with other array types. For arrays on CPU, the
+conversions should be zero-copy, while on GPU and other devices the attempt at
+conversion will raise an exception. The reason for that is that silent data
+transfer between devices is considered bad practice, as it is likely to be a
+large and hard-to-detect performance bottleneck.</p>
+</section>
+<section id="adding-tests">
+<h2>Adding tests<a class="headerlink" href="#adding-tests" title="Permalink to this heading">#</a></h2>
+<p>The following pytest markers are available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">array_api_compatible</span> <span class="pre">-&gt;</span> <span class="pre">xp</span></code>: use a parametrisation to run a test on
+multiple array backends.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skip_if_array_api</span></code>: don’t run a test if <code class="docutils literal notranslate"><span class="pre">SCIPY_ARRAY_API</span></code> is on.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skip_if_array_api_gpu</span></code>: don’t run a test if GPU is involved (also applies
+to PyTorch’s MPS mode).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skip_if_array_api_backend(backend)</span></code>: don’t run a test for a specific
+backend</p></li>
+</ul>
+<p>The following is an example using the main decorator responsible of the
+namespace parametrization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.conftest</span> <span class="kn">import</span> <span class="n">array_api_compatible</span>
+<span class="o">...</span>
+<span class="nd">@array_api_compatible</span>
+<span class="k">def</span> <span class="nf">test_toto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xp</span><span class="p">):</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">xp</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">toto</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then <code class="docutils literal notranslate"><span class="pre">dev.py</span></code> can be used with he new option <code class="docutils literal notranslate"><span class="pre">-b</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--array-api-backend</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">dev</span><span class="o">.</span><span class="n">py</span> <span class="n">test</span> <span class="o">-</span><span class="n">b</span> <span class="n">numpy</span> <span class="o">-</span><span class="n">b</span> <span class="n">pytorch</span> <span class="o">-</span><span class="n">s</span> <span class="n">cluster</span>
+</pre></div>
+</div>
+<p>This automatically sets <code class="docutils literal notranslate"><span class="pre">SCIPY_ARRAY_API</span></code> appropriately. To test a library
+that has multiple devices with a non-default device, a second environment
+variable (<code class="docutils literal notranslate"><span class="pre">SCIPY_DEVICE</span></code>, only used in the test suite) can be set. Valid
+values depend on the array library under test, e.g. for PyTorch (currently the
+only library with multi-device support that is known to work) valid values are
+<code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;,</span> <span class="pre">&quot;cuda&quot;,</span> <span class="pre">&quot;mps&quot;</span></code>. So to run the test suite with the PyTorch MPS
+backend, use: <code class="docutils literal notranslate"><span class="pre">SCIPY_DEVICE=mps</span> <span class="pre">python</span> <span class="pre">dev.py</span> <span class="pre">test</span> <span class="pre">-b</span> <span class="pre">pytorch</span></code>.</p>
+<p>Note that there is a GitHub Actions workflow which runs <code class="docutils literal notranslate"><span class="pre">pytorch-cpu</span></code>.</p>
+</section>
+<section id="additional-information">
+<h2>Additional information<a class="headerlink" href="#additional-information" title="Permalink to this heading">#</a></h2>
+<p>Here are some additional resources which motivated some design decisions and
+helped during the development phase:</p>
+<ul class="simple">
+<li><p>Initial <a class="reference external" href="https://github.com/tupui/scipy/pull/24">PR</a> with some discussions</p></li>
+<li><p>Quick started from this <a class="reference external" href="https://github.com/scipy/scipy/pull/15395">PR</a> and
+some inspiration taken from
+<a class="reference external" href="https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/utils/_array_api.py">scikit-learn</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/scikit-learn/scikit-learn/issues/22352">PR</a> adding Array
+API surpport to scikit-learn</p></li>
+<li><p>Some other relevant scikit-learn PRs:
+<a class="reference external" href="https://github.com/scikit-learn/scikit-learn/pull/22554">#22554</a> and
+<a class="reference external" href="https://github.com/scikit-learn/scikit-learn/pull/25956">#25956</a></p></li>
+</ul>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="special_ufuncs.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Adding vectorized ufuncs in <code class="docutils literal notranslate"><span class="pre">scipy.special</span></code></p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../governance.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">SciPy Project Governance</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2008-2023, The SciPy community.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

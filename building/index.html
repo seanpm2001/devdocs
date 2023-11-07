@@ -1,0 +1,816 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Building from source &#8212; SciPy v1.12.0.dev Manual</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/scipy.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Compiler selection and customizing a build" href="compilers_and_options.html" />
+    <link rel="prev" title="scipy.stats._result_classes.EmpiricalDistributionFunction.plot" href="../reference/generated/scipy.stats._result_classes.EmpiricalDistributionFunction.plot.html" />
+    <script defer data-domain="docs.scipy.org" src="https://views.scientific-python.org/js/script.js"></script>
+    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://scipy.org/install/">
+  Installing
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../tutorial/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../reference/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Building from source
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../dev/index.html">
+  Development
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../release.html">
+  Release notes
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        development  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables building/index and {'json_url': 'https://scipy.github.io/devdocs/_static/version_switcher.json', 'version_match': 'development'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "building/index.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://scipy.github.io/devdocs/_static/version_switcher.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "building/index.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 1.12.0.dev variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "development") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/scipy/scipy" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/SciPy_team" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="compilers_and_options.html">
+   Compiler selection and customizing a build
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="blas_lapack.html">
+   BLAS and LAPACK
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cross_compilation.html">
+   Cross compilation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="redistributable_binaries.html">
+   Building redistributable binaries
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="understanding_meson.html">
+   Understanding Meson
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="introspecting_a_build.html">
+   Introspecting build steps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="distutils_equivalents.html">
+   Meson and
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     distutils
+    </span>
+   </code>
+   ways of doing things
+  </a>
+ </li>
+</ul>
+
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#system-level-dependencies">
+   System-level dependencies
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#building-scipy-from-source">
+   Building SciPy from source
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-from-source-to-use-scipy">
+     Building from source to use SciPy
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-from-source-for-scipy-development">
+     Building from source for SciPy development
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#customizing-builds">
+   Customizing builds
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#background-information">
+   Background information
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="building-from-source">
+<span id="id1"></span><h1>Building from source<a class="headerlink" href="#building-from-source" title="Permalink to this heading">#</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are only trying to install SciPy, we recommend using binaries - see
+<a class="reference external" href="https://scipy.org/install">Installation</a> for details on that.</p>
+</div>
+<p>Building SciPy from source requires setting up system-level dependencies
+(compilers, BLAS/LAPACK libraries, etc.) first, and then invoking a build. The
+build may be done in order to install SciPy for local usage, develop SciPy
+itself, or build redistributable binary packages. And it may be desired to
+customize aspects of how the build is done. This guide will cover all these
+aspects. In addition, it provides background information on how the SciPy build
+works, and links to up-to-date guides for generic Python build &amp; packaging
+documentation that is relevant.</p>
+<section id="system-level-dependencies">
+<span id="system-level"></span><h2>System-level dependencies<a class="headerlink" href="#system-level-dependencies" title="Permalink to this heading">#</a></h2>
+<p>SciPy uses compiled code for speed, which means you need compilers and some
+other system-level (i.e, non-Python / non-PyPI) dependencies to build it on
+your system.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are using Conda, you can skip the steps in this section - with the
+exception of installing compilers for Windows or the Apple Developer Tools
+for macOS. All other dependencies will be installed automatically by the
+<code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-f</span> <span class="pre">environment.yml</span></code> command.</p>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" data-sync-id="linux" for="sd-tab-item-0">
+Linux</label><div class="sd-tab-content docutils">
+<p>If you want to use the system Python and <code class="docutils literal notranslate"><span class="pre">pip</span></code>, you will need:</p>
+<ul class="simple">
+<li><p>C, C++, and Fortran compilers (typically <code class="docutils literal notranslate"><span class="pre">gcc</span></code>, <code class="docutils literal notranslate"><span class="pre">g++</span></code>, and <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>).</p></li>
+<li><p>Python header files (typically a package named <code class="docutils literal notranslate"><span class="pre">python3-dev</span></code> or
+<code class="docutils literal notranslate"><span class="pre">python3-devel</span></code>)</p></li>
+<li><p>BLAS and LAPACK libraries. <a class="reference external" href="https://github.com/xianyi/OpenBLAS/">OpenBLAS</a>
+is the SciPy default; other variants include
+<a class="reference external" href="http://math-atlas.sourceforge.net/">ATLAS</a> and
+<a class="reference external" href="https://software.intel.com/en-us/intel-mkl">MKL</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pkg-config</span></code> for dependency detection.</p></li>
+</ul>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-3">
+Debian/Ubuntu Linux</label><div class="sd-tab-content docutils">
+<p>To install SciPy build requirements, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">gcc</span> <span class="n">g</span><span class="o">++</span> <span class="n">gfortran</span> <span class="n">libopenblas</span><span class="o">-</span><span class="n">dev</span> <span class="n">liblapack</span><span class="o">-</span><span class="n">dev</span> <span class="n">pkg</span><span class="o">-</span><span class="n">config</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span> <span class="n">python3</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>Alternatively, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">build</span><span class="o">-</span><span class="n">dep</span> <span class="n">scipy</span>
+</pre></div>
+</div>
+<p>This command installs whatever is needed to build SciPy, with the
+advantage that new dependencies or updates to required versions are
+handled by the package managers.</p>
+</div>
+<input id="sd-tab-item-4" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-4">
+Fedora</label><div class="sd-tab-content docutils">
+<p>To install SciPy build requirements, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">dnf</span> <span class="n">install</span> <span class="n">gcc</span><span class="o">-</span><span class="n">gfortran</span> <span class="n">python3</span><span class="o">-</span><span class="n">devel</span> <span class="n">openblas</span><span class="o">-</span><span class="n">devel</span> <span class="n">lapack</span><span class="o">-</span><span class="n">devel</span> <span class="n">pkgconfig</span>
+</pre></div>
+</div>
+<p>Alternatively, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">dnf</span> <span class="n">builddep</span> <span class="n">scipy</span>
+</pre></div>
+</div>
+<p>This command installs whatever is needed to build SciPy, with the
+advantage that new dependencies or updates to required versions are
+handled by the package managers.</p>
+</div>
+<input id="sd-tab-item-5" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-5">
+CentOS/RHEL</label><div class="sd-tab-content docutils">
+<p>To install SciPy build requirements, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span> <span class="n">install</span> <span class="n">gcc</span><span class="o">-</span><span class="n">gfortran</span> <span class="n">python3</span><span class="o">-</span><span class="n">devel</span> <span class="n">openblas</span><span class="o">-</span><span class="n">devel</span> <span class="n">lapack</span><span class="o">-</span><span class="n">devel</span> <span class="n">pkgconfig</span>
+</pre></div>
+</div>
+<p>Alternatively, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">yum</span><span class="o">-</span><span class="n">builddep</span> <span class="n">scipy</span>
+</pre></div>
+</div>
+<p>This command installs whatever is needed to build SciPy, with the
+advantage that new dependencies or updates to required versions are
+handled by the package managers.</p>
+</div>
+<input id="sd-tab-item-6" name="sd-tab-set-1" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-6">
+Arch</label><div class="sd-tab-content docutils">
+<p>To install SciPy build requirements, you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pacman</span> <span class="o">-</span><span class="n">S</span> <span class="n">gcc</span><span class="o">-</span><span class="n">fortran</span> <span class="n">openblas</span> <span class="n">pkgconf</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" data-sync-id="macos" for="sd-tab-item-1">
+macOS</label><div class="sd-tab-content docutils">
+<p>Install Apple Developer Tools. An easy way to do this is to
+<a class="reference external" href="https://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line">open a terminal window</a>,
+enter the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xcode</span><span class="o">-</span><span class="n">select</span> <span class="o">--</span><span class="n">install</span>
+</pre></div>
+</div>
+<p>and follow the prompts. Apple Developer Tools includes Git, the Clang C/C++
+compilers, and other development utilities that may be required.</p>
+<p>Do <em>not</em> use the macOS system Python. Instead, install Python
+with <a class="reference external" href="https://www.python.org/downloads/">the python.org installer</a> or
+with a package manager like Homebrew, MacPorts or Fink.</p>
+<p>The other system dependencies you need are a Fortran compiler, BLAS and
+LAPACK libraries, and pkg-config. They’re easiest to install with
+<a class="reference external" href="https://brew.sh/">Homebrew</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">gfortran</span> <span class="n">openblas</span> <span class="n">pkg</span><span class="o">-</span><span class="n">config</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of SciPy &gt;=1.2.0, we do not support compiling against the system
+Accelerate library for BLAS and LAPACK. It does not support a sufficiently
+recent LAPACK interface. This is planned to change in 2023, because macOS
+13.3 introduced a major upgrade to Accelerate which resolved all known
+issues.</p>
+</div>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" data-sync-id="windows" for="sd-tab-item-2">
+Windows</label><div class="sd-tab-content docutils">
+<p>A compatible set of C, C++ and Fortran compilers is needed to build SciPy.
+This is trickier on Windows than on other platforms, because MSVC does not
+support Fortran, and gfortran and MSVC can’t be used together. You will
+need one of these sets of compilers:</p>
+<ol class="arabic simple">
+<li><p>Mingw-w64 compilers (<code class="docutils literal notranslate"><span class="pre">gcc</span></code>, <code class="docutils literal notranslate"><span class="pre">g++</span></code>, <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>) - <em>recommended,
+because it’s easiest to install and is what we use for SciPy’s own CI
+and binaries</em></p></li>
+<li><p>MSVC + Intel Fortran (<code class="docutils literal notranslate"><span class="pre">ifort</span></code>)</p></li>
+<li><p>Intel compilers (<code class="docutils literal notranslate"><span class="pre">icc</span></code>, <code class="docutils literal notranslate"><span class="pre">ifort</span></code>)</p></li>
+</ol>
+<p>Compared to macOS and Linux, building SciPy on Windows is a little more
+difficult, due to the need to set up these compilers. It is not possible to
+just call a one-liner on the command prompt as you would on other
+platforms.</p>
+<p>First, install Microsoft Visual Studio - the 2019 Community Edition or any
+newer version will work (see the
+<a class="reference external" href="https://visualstudio.microsoft.com/downloads/">Visual Studio download site</a>).
+This is needed even if you use the MinGW-w64 or Intel compilers, in order
+to ensure you have the Windows Universal C Runtime (the other components of
+Visual Studio are not needed when using Mingw-w64, and can be deselected if
+desired, to save disk space).</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-7" name="sd-tab-set-2" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-7">
+MinGW-w64</label><div class="sd-tab-content docutils">
+<p>There are several sources of binaries for MinGW-w64. We recommend the
+RTools versions, which can be installed with Chocolatey (see
+Chocolatey install instructions <a class="reference external" href="https://chocolatey.org/install">here</a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">choco</span> <span class="n">install</span> <span class="n">rtools</span> <span class="o">-</span><span class="n">y</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">progress</span> <span class="o">--</span><span class="n">force</span> <span class="o">--</span><span class="n">version</span><span class="o">=</span><span class="mf">4.0.0.20220206</span>
+</pre></div>
+</div>
+<p>In case of issues, we recommend using the exact same version as used
+in the <a class="reference external" href="https://github.com/scipy/scipy/blob/main/.github/workflows/windows.yml">SciPy GitHub Actions CI jobs for Windows</a>.</p>
+</div>
+<input id="sd-tab-item-8" name="sd-tab-set-2" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-8">
+MSVC</label><div class="sd-tab-content docutils">
+<p>The MSVC installer does not put the compilers on the system path, and
+the install location may change. To query the install location, MSVC
+comes with a <code class="docutils literal notranslate"><span class="pre">vswhere.exe</span></code> command-line utility. And to make the
+C/C++ compilers available inside the shell you are using, you need to
+run a <code class="docutils literal notranslate"><span class="pre">.bat</span></code> file for the correct bitness and architecture (e.g., for
+64-bit Intel CPUs, use <code class="docutils literal notranslate"><span class="pre">vcvars64.bat</span></code>).</p>
+<p>For detailed guidance, see <a class="reference external" href="https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170">Use the Microsoft C++ toolset from the command line</a>.</p>
+</div>
+<input id="sd-tab-item-9" name="sd-tab-set-2" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-9">
+Intel</label><div class="sd-tab-content docutils">
+<p>Similar to MSVC, the Intel compilers are designed to be used with an
+activation script (<code class="docutils literal notranslate"><span class="pre">Intel\oneAPI\setvars.bat</span></code>) that you run in the
+shell you are using. This makes the compilers available on the path.
+For detailed guidance, see
+<a class="reference external" href="https://www.intel.com/content/www/us/en/docs/oneapi-hpc-toolkit/get-started-guide-windows/2023-1/overview.html">Get Started with the Intel® oneAPI HPC Toolkit for Windows</a>.</p>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compilers should be on the system path (i.e., the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment
+variable should contain the directory in which the compiler executables
+can be found) in order to be found, with the exception of MSVC which
+will be found automatically if and only if there are no other compilers
+on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>. You can use any shell (e.g., Powershell, <code class="docutils literal notranslate"><span class="pre">cmd</span></code> or
+Git Bash) to invoke a build. To check that this is the case, try
+invoking a Fortran compiler in the shell you use (e.g., <code class="docutils literal notranslate"><span class="pre">gfortran</span>
+<span class="pre">--version</span></code> or <code class="docutils literal notranslate"><span class="pre">ifort</span> <span class="pre">--version</span></code>).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using a conda environment it is possible that the environment
+creation will not work due to an outdated Fortran compiler. If that
+happens, remove the <code class="docutils literal notranslate"><span class="pre">compilers</span></code> entry from <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> and
+try again. The Fortran compiler should be installed as described in
+this section.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="building-scipy-from-source">
+<h2>Building SciPy from source<a class="headerlink" href="#building-scipy-from-source" title="Permalink to this heading">#</a></h2>
+<p>If you want to only install SciPy from source once and not do any development
+work, then the recommended way to build and install is to use <code class="docutils literal notranslate"><span class="pre">pip</span></code>.
+Otherwise, conda is recommended.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you don’t have a conda installation yet, we recommend using
+<a class="reference external" href="https://github.com/conda-forge/miniforge#mambaforge">Mambaforge</a>; any conda flavor will work though.</p>
+</div>
+<section id="building-from-source-to-use-scipy">
+<h3>Building from source to use SciPy<a class="headerlink" href="#building-from-source-to-use-scipy" title="Permalink to this heading">#</a></h3>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-3" type="radio">
+</input><label class="sd-tab-label" data-sync-id="conda" for="sd-tab-item-10">
+Conda env</label><div class="sd-tab-content docutils">
+<p>If you are using a conda environment, <code class="docutils literal notranslate"><span class="pre">pip</span></code> is still the tool you use to
+invoke a from-source build of SciPy. It is important to always use the
+<code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code> flag to the <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> command, to avoid
+building against a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> wheel from PyPI. In order for that to work you
+must first install the remaining build dependencies into the conda
+environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Either install all SciPy dev dependencies into a fresh conda environment</span>
+<span class="n">mamba</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+
+<span class="c1"># Or, install only the required build dependencies</span>
+<span class="n">mamba</span> <span class="n">install</span> <span class="n">python</span> <span class="n">numpy</span> <span class="n">cython</span> <span class="n">pythran</span> <span class="n">pybind11</span> <span class="n">compilers</span> <span class="n">openblas</span> <span class="n">pkg</span><span class="o">-</span><span class="n">config</span>
+
+<span class="c1"># To build the latest stable release:</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scipy</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">isolation</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">binary</span> <span class="n">scipy</span>
+
+<span class="c1"># To build a development version, you need a local clone of the SciPy git repository:</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">scipy</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">build</span><span class="o">-</span><span class="n">isolation</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-11" name="sd-tab-set-3" type="radio">
+</input><label class="sd-tab-label" data-sync-id="pip" for="sd-tab-item-11">
+Virtual env or system Python</label><div class="sd-tab-content docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># To build the latest stable release:</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">scipy</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">binary</span> <span class="n">scipy</span>
+
+<span class="c1"># To build a development version, you need a local clone of the SciPy git repository:</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">scipy</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="building-from-source-for-scipy-development">
+<span id="the-dev-py-interface"></span><h3>Building from source for SciPy development<a class="headerlink" href="#building-from-source-for-scipy-development" title="Permalink to this heading">#</a></h3>
+<p>If you want to build from source in order to work on SciPy itself, first clone
+the SciPy repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">scipy</span><span class="o">/</span><span class="n">scipy</span><span class="o">.</span><span class="n">git</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span> <span class="o">--</span><span class="n">init</span>
+</pre></div>
+</div>
+<p>Then you want to do the following:</p>
+<ol class="arabic simple">
+<li><p>Create a dedicated development environment (virtual environment or conda
+environment),</p></li>
+<li><p>Install all needed dependencies (<em>build</em>, and also <em>test</em>, <em>doc</em> and
+<em>optional</em> dependencies),</p></li>
+<li><p>Build SciPy with our <code class="docutils literal notranslate"><span class="pre">dev.py</span></code> developer interface.</p></li>
+</ol>
+<p>Step (3) is always the same, steps (1) and (2) are different between conda and
+virtual environments:</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-12" name="sd-tab-set-4" type="radio">
+</input><label class="sd-tab-label" data-sync-id="conda" for="sd-tab-item-12">
+Conda env</label><div class="sd-tab-content docutils">
+<p>To create a <code class="docutils literal notranslate"><span class="pre">scipy-dev</span></code> development environment with every required and
+optional dependency installed, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+<span class="n">mamba</span> <span class="n">activate</span> <span class="n">scipy</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-13" name="sd-tab-set-4" type="radio">
+</input><label class="sd-tab-label" data-sync-id="pip" for="sd-tab-item-13">
+Virtual env or system Python</label><div class="sd-tab-content docutils">
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are many tools to manage virtual environments, like <code class="docutils literal notranslate"><span class="pre">venv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>/<code class="docutils literal notranslate"><span class="pre">virtualenvwrapper</span></code>, <code class="docutils literal notranslate"><span class="pre">pyenv</span></code>/<code class="docutils literal notranslate"><span class="pre">pyenv-virtualenv</span></code>,
+Poetry, PDM, Hatch, and more. Here we use the basic <code class="docutils literal notranslate"><span class="pre">venv</span></code> tool that
+is part of the Python stdlib. You can use any other tool; all we need is
+an activated Python environment.</p>
+</div>
+<p>Create and activate a virtual environment in a new directory named <code class="docutils literal notranslate"><span class="pre">venv</span></code> (
+note that the exact activation command may be different based on your OS and shell
+- see <a class="reference external" href="https://docs.python.org/3/library/venv.html#how-venvs-work">“How venvs work”</a>
+in the <code class="docutils literal notranslate"><span class="pre">venv</span></code> docs).</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-14" name="sd-tab-set-5" type="radio">
+</input><label class="sd-tab-label" data-sync-id="linux" for="sd-tab-item-14">
+Linux</label><div class="sd-tab-content docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-15" name="sd-tab-set-5" type="radio">
+</input><label class="sd-tab-label" data-sync-id="macos" for="sd-tab-item-15">
+macOS</label><div class="sd-tab-content docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="n">source</span> <span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-16" name="sd-tab-set-5" type="radio">
+</input><label class="sd-tab-label" data-sync-id="windows" for="sd-tab-item-16">
+Windows</label><div class="sd-tab-content docutils">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">venv</span>
+<span class="o">.</span>\<span class="n">venv</span>\<span class="n">Scripts</span>\<span class="n">activate</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then install the Python-level dependencies (see <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>) from
+PyPI with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build dependencies</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span> <span class="n">cython</span> <span class="n">pythran</span> <span class="n">pybind11</span> <span class="n">meson</span> <span class="n">ninja</span> <span class="n">pydevtool</span> <span class="n">rich</span><span class="o">-</span><span class="n">click</span>
+
+<span class="c1"># Test and optional runtime dependencies</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">xdist</span> <span class="n">pytest</span><span class="o">-</span><span class="n">timeout</span> <span class="n">pooch</span> <span class="n">threadpoolctl</span> <span class="n">asv</span> <span class="n">gmpy2</span> <span class="n">mpmath</span> <span class="n">hypothesis</span>
+
+<span class="c1"># Doc build dependencies</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span> <span class="s2">&quot;pydata-sphinx-theme==0.9.0&quot;</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">design</span> <span class="n">matplotlib</span> <span class="n">numpydoc</span> <span class="n">jupytext</span> <span class="n">myst</span><span class="o">-</span><span class="n">nb</span>
+
+<span class="c1"># Dev dependencies (static typing and linting)</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">mypy</span> <span class="n">typing_extensions</span> <span class="n">types</span><span class="o">-</span><span class="n">psutil</span> <span class="n">pycodestyle</span> <span class="n">ruff</span> <span class="n">cython</span><span class="o">-</span><span class="n">lint</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To build SciPy in an activated development environment, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">dev</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+</pre></div>
+</div>
+<p>This will install SciPy inside the repository (by default in a
+<code class="docutils literal notranslate"><span class="pre">build-install</span></code> directory). You can then run tests (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">dev.py</span> <span class="pre">test</span></code>),
+drop into IPython (<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">dev.py</span> <span class="pre">ipython</span></code>), or take other development steps
+like build the html documentation or running benchmarks. The <code class="docutils literal notranslate"><span class="pre">dev.py</span></code>
+interface is self-documenting, so please see <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">dev.py</span> <span class="pre">--help</span></code> and
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">dev.py</span> <span class="pre">&lt;subcommand&gt;</span> <span class="pre">--help</span></code> for detailed guidance.</p>
+</section>
+</section>
+<section id="customizing-builds">
+<h2>Customizing builds<a class="headerlink" href="#customizing-builds" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compilers_and_options.html">Compiler selection and customizing a build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="blas_lapack.html">BLAS and LAPACK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cross_compilation.html">Cross compilation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="redistributable_binaries.html">Building redistributable binaries</a></li>
+</ul>
+</div>
+</section>
+<section id="background-information">
+<h2>Background information<a class="headerlink" href="#background-information" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="understanding_meson.html">Understanding Meson</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introspecting_a_build.html">Introspecting build steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distutils_equivalents.html">Meson and <code class="docutils literal notranslate"><span class="pre">distutils</span></code> ways of doing things</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../reference/generated/scipy.stats._result_classes.EmpiricalDistributionFunction.plot.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">scipy.stats._result_classes.EmpiricalDistributionFunction.plot</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="compilers_and_options.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Compiler selection and customizing a build</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2008-2023, The SciPy community.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>
